@@ -1,6 +1,5 @@
 #include "circle.h"
 #include "graphics.h"
-#include "rect.h"
 #include <ctime>
 #include <iostream>
 #include <memory>
@@ -33,18 +32,6 @@ void populateSnowperson() {
     snowperson.push_back(make_unique<Circle>(0, 0, 0, 1, 100, 160, 5));
     snowperson.push_back(make_unique<Circle>(0, 0, 0, 1, 115, 155, 5));
     snowperson.push_back(make_unique<Circle>(0, 0, 0, 1, 125, 145, 5));
-    // Red scarf
-    dimensions d = {60, 15};
-    snowperson.push_back(make_unique<Rect>(1, 0, 0, 1, 100, 178, d));
-    dimensions d2 = {15, 100};
-    snowperson.push_back(make_unique<Rect>(1, 0, 0, 1, 80, 225, d2));
-    // Arms
-    dimensions a1 = {100, 15};
-    snowperson.push_back(make_unique<Rect>(139/255.0, 69/255.0, 19/255.0, 1, 200, 210, a1));
-    snowperson.push_back(make_unique<Rect>(139/255.0, 69/255.0, 19/255.0, 1, 0, 210, a1));
-    dimensions a2 = {15, 50};
-    snowperson.push_back(make_unique<Rect>(139/255.0, 69/255.0, 19/255.0, 1, 230, 210, a2));
-    snowperson.push_back(make_unique<Rect>(139/255.0, 69/255.0, 19/255.0, 1, -30, 210, a2));
 }
 
 void init() {
