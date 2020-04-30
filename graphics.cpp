@@ -4,6 +4,8 @@
 #include <iostream>
 #include <memory>
 #include <vector>
+#include "gameObj.h"
+#include "gameObj.cpp"
 using namespace std;
 
 GLdouble width, height;
