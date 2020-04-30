@@ -15,6 +15,8 @@ vector<Circle> snow;
 vector<unique_ptr<Shape>> snowperson;
 int snowpersonXDirection;
 
+GameObj gObj = GameObj(1, 0, 0, 5);
+
 void populateSnowperson() {
     // Three white circles
     // red, green, blue, alpha, x, y, radius
@@ -51,6 +53,16 @@ void init() {
     }
     populateSnowperson();
     snowpersonXDirection = 0;
+
+    //Test gameObjs
+    vector<color> testColors;
+    vector<point2D> testCoords;
+    testColors.push_back(color(0.0, 1.0, 0.0));
+    //testCoords.push_back({point2D(0, 0), point2D(0, 5), point2D(5, 5), point2D(5, 0)});
+    testCoords.push_back(point2D(0, 0));
+    vector<imageFrame> test = {imageFrame(testColors, testCoords)};
+    gObj.setSprite(test);
+
 }
 
 /* Initialize OpenGL Graphics */
@@ -79,6 +91,7 @@ void display() {
     /*
      * Draw here
      */
+    /*
     c.draw();
     for (Circle &s : snow) {
         s.draw();
@@ -87,6 +100,15 @@ void display() {
     for (unique_ptr<Shape> &s : snowperson) {
         s->draw();
     }
+     */
+
+    /*
+    //Draw the GameObjs
+    for (GameObj &g : gameObjs) {
+        g.draw();
+    }
+     */
+    gObj.draw();
     
     glFlush();  // Render now
 }

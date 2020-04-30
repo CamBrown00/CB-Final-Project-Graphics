@@ -6,29 +6,35 @@
 
 struct imageFrame {
     std::vector<color> pixelColors;
-    std::vector<point2D> pixelCoords;
+    std::vector<std::vector<point2D>> pixelCoords;
 
     /* Constructors */
-    imageFrame(std::vector<color> pixelColors, std::vector<point2D> pixelCoords);
+    imageFrame(std::vector<color> pixelColors, std::vector<std::vector<point2D>> pixelCoords);
+    imageFrame(std::vector<color> pixelColors, std::vector<point2D> prc);
 
 };
 
 class GameObj{
 private:
     std::vector<imageFrame> sprite;
+    int imageFrameIndex = 0;
     int id;
+    int scale;
     point2D center;
 
 public:
     //Constructors
     GameObj();
-    GameObj(int id, int x, int y, std::vector<imageFrame> sprites);
+    GameObj(int id, int x, int y, int scale);
+    GameObj(int id, int x, int y, int scale, std::vector<imageFrame> sprite);
 
     //Destructor
     virtual ~GameObj() = default;
 
     //Getters
     int getId() const;
+    int getScale() const;
+    int getImageFrameIndex() const;
     int getCenterX() const;
     int getCenterY() const;
     point2D getCenter() const;
@@ -41,13 +47,15 @@ public:
     virtual void setCenterX(int x);
     virtual void setCenterY(int y);
     virtual void setId(int id);
+    virtual void setScale(int scale);
+    virtual void setImageFrameIndex(int imageFrameIndex);
     virtual void setSprite(std::vector<imageFrame> sprite);
 
     //Non-Trivial Methods
     virtual void move(double deltaX, double deltaY);
     virtual void moveX(double deltaX);
     void moveY(double deltaY);
-    virtual void draw() const = 0;
+    virtual void draw() const;
 
 };
 
