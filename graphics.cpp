@@ -57,9 +57,11 @@ void init() {
     //Test gameObjs
     vector<color> testColors;
     vector<point2D> testCoords;
-    testColors.push_back(color(0.0, 1.0, 0.0));
+    // region Directly displaying an image in c++ requires the use of shaders and textures
+    testColors.push_back(color(.835, .159, 0.035, 0.0));
     //testCoords.push_back({point2D(0, 0), point2D(0, 5), point2D(5, 5), point2D(5, 0)});
     testCoords.push_back(point2D(0, 0));
+    //endregion
     vector<imageFrame> test = {imageFrame(testColors, testCoords)};
     gObj.setSprite(test);
 

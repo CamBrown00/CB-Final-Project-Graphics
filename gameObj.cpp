@@ -115,7 +115,7 @@ void GameObj :: draw() const {
     if (coords.size() == colors.size()) {
         for (int i = 0; i < sprite[imageFrameIndex].pixelCoords.size(); ++i) {
             glBegin(GL_QUADS);
-            glColor3f(colors[i].red, colors[i].green, colors[i].blue);
+            glColor4f(colors[i].red, colors[i].green, colors[i].blue, colors[i].alpha);
             glVertex2i((coords[i][0].x + center.x) * scale, (coords[i][0].y + center.y) * scale);
             glVertex2i((coords[i][1].x + center.x) * scale, (coords[i][1].y + center.y) * scale);
             glVertex2i((coords[i][2].x + center.x) * scale, (coords[i][2].y + center.y) * scale);
