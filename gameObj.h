@@ -4,7 +4,6 @@
 #include "shape.h"
 #include <vector>
 #include <iostream>
-#include <filesystem>
 
 struct imageFrame {
     std::vector<color> pixelColors;
@@ -62,7 +61,7 @@ public:
     virtual void move(double deltaX, double deltaY);
     virtual void moveX(double deltaX);
     void moveY(double deltaY);
-    virtual void addSpriteFromFile(std::string directory);
+    virtual void addSpriteFromFile(std::string directory, int frameCount);
     virtual void draw() const;
 
 };

@@ -39,7 +39,7 @@ def readSpriteToFile(readPath):
             writeFile.write( str(len(sprArr[0])) + "," + str(len(sprArr)) + "\n")
             writeFile = open(((os.path.splitext(framePath))[0] + ".csv"), "a")
             for i in range(len(sprArr)):
-                np.savetxt(writeFile, sprArr[i], delimiter=",")
+                np.savetxt(writeFile, sprArr[i], delimiter=",", fmt='%1.0d')
             writeFile.close()
     
     

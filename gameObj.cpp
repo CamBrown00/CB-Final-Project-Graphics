@@ -1,6 +1,10 @@
 #include "gameObj.h"
-#include <filesystem>
-
+#include "graphics.h"
+#include <iostream>
+#include<iomanip>
+#include <fstream>
+#include <sstream>
+#include <string>
 
 /********************* Image Frame Struct ********************/
 
@@ -130,23 +134,63 @@ void GameObj :: moveY(double deltaY) {
 }
 
 
-void GameObj :: addSpriteFromFile(std::string directory) {
-    for (const auto & entry : filesystem::directory_iterator(directory))
-        std::cout << entry.path() << std::endl;
+void GameObj :: addSpriteFromFile(std::string directory, int frameCount) {
+    std::vector<imageFrame> imageFrames;
+    for (int i = 1; i <= frameCount; ++i) {
+        std::ifstream inFile;
+        inFile.open(directory + std::to_string(i) + ".csv");
+
+        int width = 0, height = 0;
+        int r, g, b, a, sum;
+        char comma = ',';
+
+        if (inFile){
+            inFile >> width;
+            inFile >> comma;
+            inFile >> height;
+        }
+
+        //Read in the rbga values, construct coords and colors from them for an imageFrame
+        std::vector<color> pixelColors;
+        std::vector<point2D> coordinates;
+        for (int j = 0; j < height; ++j) {
+            for (int k = 0; k < width; ++k) {
+                inFile >> r;
+                inFile >> comma;
+                inFile >> g;
+                inFile >> comma;
+                inFile >> b;
+                inFile >> comma;
+                inFile >> a;
+                sum = r + g + b;
+                if (sum == 0){
+                    pixelColors.push_back(color(0.0, 0.0, 0.0, a/255));
+                } else {
+                    pixelColors.push_back(color(double(r)/sum, double(g)/sum, double(b)/sum, double(a)/255));
+                }
+                coordinates.push_back(point2D(k, j));
+            }
+        }
+        imageFrame tempFrame = imageFrame(pixelColors, coordinates);
+        imageFrames.push_back(tempFrame);
+    }
+    sprites.push_back(imageFrames);
 }
 
 void GameObj :: draw() const {
-    std::vector<color> colors = sprites[spriteIndex][imageFrameIndex].pixelColors;
-    std::vector<std::vector<point2D>> coords = sprites[spriteIndex][imageFrameIndex].pixelCoords;
-    if (coords.size() == colors.size()) {
-        for (int i = 0; i < sprites[spriteIndex][imageFrameIndex].pixelCoords.size(); ++i) {
-            glBegin(GL_QUADS);
-            glColor4f(colors[i].red, colors[i].green, colors[i].blue, colors[i].alpha);
-            glVertex2i((coords[i][0].x + center.x) * scale, (coords[i][0].y + center.y) * scale);
-            glVertex2i((coords[i][1].x + center.x) * scale, (coords[i][1].y + center.y) * scale);
-            glVertex2i((coords[i][2].x + center.x) * scale, (coords[i][2].y + center.y) * scale);
-            glVertex2i((coords[i][3].x + center.x) * scale, (coords[i][3].y + center.y) * scale);
-            glEnd();
+    if (sprites.size() > 0) {
+        std::vector<color> colors = sprites[spriteIndex][imageFrameIndex].pixelColors;
+        std::vector<std::vector<point2D>> coords = sprites[spriteIndex][imageFrameIndex].pixelCoords;
+        if (coords.size() == colors.size() && sprites.size() > 0) {
+            for (int i = 0; i < sprites[spriteIndex][imageFrameIndex].pixelCoords.size(); ++i) {
+                glBegin(GL_QUADS);
+                glColor4f(colors[i].red, colors[i].green, colors[i].blue, colors[i].alpha);
+                glVertex2i((coords[i][0].x + center.x) * scale, (coords[i][0].y + center.y) * scale);
+                glVertex2i((coords[i][1].x + center.x) * scale, (coords[i][1].y + center.y) * scale);
+                glVertex2i((coords[i][2].x + center.x) * scale, (coords[i][2].y + center.y) * scale);
+                glVertex2i((coords[i][3].x + center.x) * scale, (coords[i][3].y + center.y) * scale);
+                glEnd();
+            }
         }
     }
 }

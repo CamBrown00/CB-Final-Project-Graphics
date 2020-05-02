@@ -5,7 +5,7 @@
 #include <memory>
 #include <vector>
 #include "gameObj.h"
-#include "gameObj.cpp"
+#include "LinkObj.h"
 using namespace std;
 
 GLdouble width, height;
@@ -15,7 +15,8 @@ vector<Circle> snow;
 vector<unique_ptr<Shape>> snowperson;
 int snowpersonXDirection;
 
-GameObj gObj = GameObj(1, 0, 0, 5);
+GameObj gObj = GameObj(1, 0, 0, 2);
+LinkObj link = LinkObj(1, 0, 0, 2);
 
 void populateSnowperson() {
     // Three white circles
@@ -39,6 +40,7 @@ void populateSnowperson() {
 }
 
 void init() {
+
     srand(time(0));
     width = 500;
     height = 500;
@@ -63,7 +65,8 @@ void init() {
     testCoords.push_back(point2D(0, 0));
     //endregion
     vector<imageFrame> test = {imageFrame(testColors, testCoords)};
-    gObj.addSprite(test);
+    //gObj.addSprite(test);
+    //gObj.addSpriteFromFile("../Resources/Sprites/Link/MoveSprs/LinkMoveSprBack/linkMoveSprBack", 2);
 
 }
 
@@ -111,6 +114,7 @@ void display() {
     }
      */
     gObj.draw();
+    link.draw();
     
     glFlush();  // Render now
 }
@@ -118,6 +122,8 @@ void display() {
 // http://www.theasciicode.com.ar/ascii-control-characters/escape-ascii-code-27.html
 void kbd(unsigned char key, int x, int y)
 {
+    // Call kbd functions for game objects
+    link.kbd(key);
     switch(key) {
         // escape
         case 27: {
@@ -226,7 +232,7 @@ int main(int argc, char** argv) {
     glutInitWindowSize((int)width, (int)height);
     glutInitWindowPosition(250, 180); // Position the window's initial top-left corner
     /* create the window and store the handle to it */
-    wd = glutCreateWindow("Graphics Examples!" /* title */ );
+    wd = glutCreateWindow("The Legend of Zelda" /* title */ );
     
     // Register callback handler for window re-paint event
     glutDisplayFunc(display);
