@@ -63,7 +63,7 @@ void init() {
     testCoords.push_back(point2D(0, 0));
     //endregion
     vector<imageFrame> test = {imageFrame(testColors, testCoords)};
-    gObj.setSprite(test);
+    gObj.addSprite(test);
 
 }
 

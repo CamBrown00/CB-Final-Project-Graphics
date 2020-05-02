@@ -3,6 +3,8 @@
 
 #include "shape.h"
 #include <vector>
+#include <iostream>
+#include <filesystem>
 
 struct imageFrame {
     std::vector<color> pixelColors;
@@ -16,10 +18,11 @@ struct imageFrame {
 
 class GameObj{
 private:
-    std::vector<imageFrame> sprite;
+    std::vector<std::vector<imageFrame>> sprites;
     int imageFrameIndex = 0;
     int id;
     int scale;
+    int spriteIndex = 0;
     point2D center;
 
 public:
@@ -27,6 +30,7 @@ public:
     GameObj();
     GameObj(int id, int x, int y, int scale);
     GameObj(int id, int x, int y, int scale, std::vector<imageFrame> sprite);
+    GameObj(int id, int x, int y, int scale, std::vector<std::vector<imageFrame>> sprites);
 
     //Destructor
     virtual ~GameObj() = default;
@@ -37,8 +41,9 @@ public:
     int getImageFrameIndex() const;
     int getCenterX() const;
     int getCenterY() const;
+    int getSpriteIndex() const;
     point2D getCenter() const;
-    std::vector<imageFrame> getSprite() const;
+    std::vector<std::vector<imageFrame>> getSprites() const;
 
 
     //Setters
@@ -49,12 +54,15 @@ public:
     virtual void setId(int id);
     virtual void setScale(int scale);
     virtual void setImageFrameIndex(int imageFrameIndex);
-    virtual void setSprite(std::vector<imageFrame> sprite);
+    virtual void setSpriteIndex(int spriteIndex);
+    virtual void addSprite(std::vector<imageFrame> sprite);
+    virtual void setSprites(std::vector<std::vector<imageFrame>> sprites);
 
     //Non-Trivial Methods
     virtual void move(double deltaX, double deltaY);
     virtual void moveX(double deltaX);
     void moveY(double deltaY);
+    virtual void addSpriteFromFile(std::string directory);
     virtual void draw() const;
 
 };

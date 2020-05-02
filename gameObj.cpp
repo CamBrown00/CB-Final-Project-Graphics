@@ -1,5 +1,5 @@
 #include "gameObj.h"
-#include <iostream>
+#include <filesystem>
 
 
 /********************* Image Frame Struct ********************/
@@ -27,9 +27,17 @@ GameObj :: GameObj(int id, int x, int y, int scale) {
 GameObj :: GameObj(int id, int x, int y, int scale, std::vector<imageFrame> sprite) {
     this->id = id;
     center = point2D(x, y);
-    this->sprite = sprite;
+    sprites.push_back(sprite);
     this->scale = scale;
 }
+
+GameObj :: GameObj(int id, int x, int y, int scale, std::vector<std::vector<imageFrame>> sprites) {
+    this->id = id;
+    center = point2D(x, y);
+    this->sprites = sprites;
+    this->scale = scale;
+}
+
 
 
 //Getters
@@ -45,6 +53,10 @@ int GameObj :: getImageFrameIndex() const {
     return imageFrameIndex;
 }
 
+int GameObj :: getSpriteIndex() const {
+    return spriteIndex;
+}
+
 int GameObj :: getCenterX() const {
     return center.x;
 }
@@ -57,8 +69,8 @@ point2D GameObj :: getCenter() const {
     return center;
 }
 
-std::vector<imageFrame> GameObj :: getSprite() const {
-    return sprite;
+std::vector<std::vector<imageFrame>> GameObj :: getSprites() const {
+    return sprites;
 }
 
 //Setters
@@ -74,8 +86,16 @@ void  GameObj :: setImageFrameIndex(int imageFrameIndex) {
     this->imageFrameIndex = imageFrameIndex;
 }
 
-void GameObj :: setSprite(std::vector<imageFrame> sprite) {
-    this->sprite = sprite;
+void  GameObj :: setSpriteIndex(int spriteIndex) {
+    this->spriteIndex = spriteIndex;
+}
+
+void GameObj :: addSprite(std::vector<imageFrame> sprite) {
+    sprites.push_back(sprite);
+}
+
+void GameObj :: setSprites(std::vector<std::vector<imageFrame>> sprites) {
+    this->sprites = sprites;
 }
 
 void GameObj :: setCenter(point2D center) {
@@ -109,11 +129,17 @@ void GameObj :: moveY(double deltaY) {
     center.y += deltaY;
 }
 
+
+void GameObj :: addSpriteFromFile(std::string directory) {
+    for (const auto & entry : filesystem::directory_iterator(directory))
+        std::cout << entry.path() << std::endl;
+}
+
 void GameObj :: draw() const {
-    std::vector<color> colors = sprite[imageFrameIndex].pixelColors;
-    std::vector<std::vector<point2D>> coords = sprite[imageFrameIndex].pixelCoords;
+    std::vector<color> colors = sprites[spriteIndex][imageFrameIndex].pixelColors;
+    std::vector<std::vector<point2D>> coords = sprites[spriteIndex][imageFrameIndex].pixelCoords;
     if (coords.size() == colors.size()) {
-        for (int i = 0; i < sprite[imageFrameIndex].pixelCoords.size(); ++i) {
+        for (int i = 0; i < sprites[spriteIndex][imageFrameIndex].pixelCoords.size(); ++i) {
             glBegin(GL_QUADS);
             glColor4f(colors[i].red, colors[i].green, colors[i].blue, colors[i].alpha);
             glVertex2i((coords[i][0].x + center.x) * scale, (coords[i][0].y + center.y) * scale);
