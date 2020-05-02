@@ -53,6 +53,14 @@ int GameObj :: getScale() const {
     return scale;
 }
 
+bool GameObj :: getMirrorX() const {
+    return mirrorX;
+}
+
+bool GameObj :: getMirrorY() const {
+    return mirrorY;
+}
+
 int GameObj :: getImageFrameIndex() const {
     return imageFrameIndex;
 }
@@ -77,6 +85,14 @@ std::vector<std::vector<imageFrame>> GameObj :: getSprites() const {
     return sprites;
 }
 
+std::vector<int> GameObj :: getSpriteWidths() const {
+    return spriteWidths;
+}
+
+std::vector<int> GameObj :: getSpriteHeights() const {
+    return spriteHeights;
+}
+
 //Setters
 void  GameObj :: setId(int id) {
     this->id = id;
@@ -94,8 +110,10 @@ void  GameObj :: setSpriteIndex(int spriteIndex) {
     this->spriteIndex = spriteIndex;
 }
 
-void GameObj :: addSprite(std::vector<imageFrame> sprite) {
+void GameObj :: addSprite(std::vector<imageFrame> sprite, int width, int height) {
     sprites.push_back(sprite);
+    spriteWidths.push_back(width);
+    spriteHeights.push_back(height);
 }
 
 void GameObj :: setSprites(std::vector<std::vector<imageFrame>> sprites) {
@@ -133,6 +151,44 @@ void GameObj :: moveY(double deltaY) {
     center.y += deltaY;
 }
 
+// Mirrors sprite at current sprite index by swapping the pixels in each row of the sprite
+void GameObj :: mirrorSpritesX() {
+    if (sprites.size() > 0) {
+        int width = spriteWidths[spriteIndex];
+        int height = spriteHeights[spriteIndex];
+        mirrorX = !mirrorX;
+        std::vector<std::vector<point2D>> tempCoords = sprites[spriteIndex][imageFrameIndex].pixelCoords;
+        std::vector<point2D> tempPixelBeginCoord;
+        std::vector<point2D> tempPixelEndCoord;
+        int count = 0;
+        for (int i = 0; i < height; ++i) {
+            ++count;
+            for (int j = 0; j < width; j++) {
+                if (j < width/2) {
+                    if (width * count != (width * height)) {
+                        tempPixelBeginCoord = tempCoords[(width * i) + j];
+                        tempPixelEndCoord = tempCoords[(width * count) - j];
+                        tempCoords[(width * count) - j] = tempPixelBeginCoord;
+                        tempCoords[(width * i) + j] = tempPixelEndCoord;
+                    }
+                    else {
+                        tempPixelBeginCoord = tempCoords[(width * i) + j];
+                        tempPixelEndCoord = tempCoords[(width * height) - j - 1];
+                        tempCoords[(width * height) - j - 1] = tempPixelBeginCoord;
+                        tempCoords[(width * i) + j] = tempPixelEndCoord;
+                    }
+                }
+            }
+        }
+        sprites[spriteIndex][imageFrameIndex].pixelCoords = tempCoords;
+    }
+}
+
+void GameObj :: mirrorSpritesY() {
+    mirrorY = !mirrorY;
+
+}
+
 
 void GameObj :: addSpriteFromFile(std::string directory, int frameCount) {
     std::vector<imageFrame> imageFrames;
@@ -149,6 +205,10 @@ void GameObj :: addSpriteFromFile(std::string directory, int frameCount) {
             inFile >> comma;
             inFile >> height;
         }
+
+        //Update width and height
+        spriteWidths.push_back(width);
+        spriteHeights.push_back(height);
 
         //Read in the rbga values, construct coords and colors from them for an imageFrame
         std::vector<color> pixelColors;
@@ -181,7 +241,7 @@ void GameObj :: draw() const {
     if (sprites.size() > 0) {
         std::vector<color> colors = sprites[spriteIndex][imageFrameIndex].pixelColors;
         std::vector<std::vector<point2D>> coords = sprites[spriteIndex][imageFrameIndex].pixelCoords;
-        if (coords.size() == colors.size() && sprites.size() > 0) {
+        if (coords.size() == colors.size()) {
             for (int i = 0; i < sprites[spriteIndex][imageFrameIndex].pixelCoords.size(); ++i) {
                 glBegin(GL_QUADS);
                 glColor4f(colors[i].red, colors[i].green, colors[i].blue, colors[i].alpha);

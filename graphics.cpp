@@ -123,7 +123,8 @@ void display() {
 void kbd(unsigned char key, int x, int y)
 {
     // Call kbd functions for game objects
-    link.kbd(key);
+    link.kbd(key, x, y);
+
     switch(key) {
         // escape
         case 27: {
@@ -144,6 +145,12 @@ void kbd(unsigned char key, int x, int y)
 
     }
     
+    glutPostRedisplay();
+}
+
+void kbdUp(unsigned char key, int x, int y) {
+    // Call kbd functions for game objects
+    link.kbdUp(key, x, y);
     glutPostRedisplay();
 }
 
@@ -202,6 +209,12 @@ void timer(int dummy) {
     glutTimerFunc(30, timer, dummy);
 }
 
+void linkObjTimer (int dummy) {
+
+    glutPostRedisplay();
+    glutTimerFunc(30, linkObjTimer, dummy);
+}
+
 void timerSnowperson(int dummy) {
 
     if (snowpersonXDirection < 0) {
@@ -243,6 +256,7 @@ int main(int argc, char** argv) {
     // register keyboard press event processing function
     // works for numbers, letters, spacebar, etc.
     glutKeyboardFunc(kbd);
+    glutKeyboardUpFunc(kbdUp);
     
     // register special event: function keys, arrows, etc.
     glutSpecialFunc(kbdS);

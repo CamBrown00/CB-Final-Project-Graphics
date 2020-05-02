@@ -21,7 +21,8 @@ public:
     // Setters
 
     // Non-trivial methods
-    void kbd(unsigned char key);
+    void kbd(unsigned char key, int x, int y);
+    void kbdUp(unsigned char key, int x, int y);
     void readSpritesFromFiles();
 
 };

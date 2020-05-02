@@ -18,9 +18,13 @@ struct imageFrame {
 class GameObj{
 private:
     std::vector<std::vector<imageFrame>> sprites;
+    std::vector<int> spriteWidths;
+    std::vector<int> spriteHeights;
     int imageFrameIndex = 0;
     int id;
     int scale;
+    bool mirrorX = false;
+    bool mirrorY = false;
     int spriteIndex = 0;
     point2D center;
 
@@ -41,8 +45,12 @@ public:
     int getCenterX() const;
     int getCenterY() const;
     int getSpriteIndex() const;
+    bool getMirrorX() const;
+    bool getMirrorY() const;
     point2D getCenter() const;
     std::vector<std::vector<imageFrame>> getSprites() const;
+    std::vector<int> getSpriteWidths() const;
+    std::vector<int> getSpriteHeights() const;
 
 
     //Setters
@@ -54,10 +62,12 @@ public:
     virtual void setScale(int scale);
     virtual void setImageFrameIndex(int imageFrameIndex);
     virtual void setSpriteIndex(int spriteIndex);
-    virtual void addSprite(std::vector<imageFrame> sprite);
+    virtual void addSprite(std::vector<imageFrame> sprite, int width, int height);
     virtual void setSprites(std::vector<std::vector<imageFrame>> sprites);
 
     //Non-Trivial Methods
+    virtual void mirrorSpritesX();
+    virtual void mirrorSpritesY();
     virtual void move(double deltaX, double deltaY);
     virtual void moveX(double deltaX);
     void moveY(double deltaY);
