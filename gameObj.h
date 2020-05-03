@@ -52,6 +52,7 @@ private:
     bool mirrorX = false;
     bool mirrorY = false;
     int spriteIndex = 0;
+    int animationSpeed = 0;
     point2D center;
     int hSpd = 0;
     int vSpd = 0;
@@ -73,6 +74,7 @@ public:
     int getCenterX() const;
     int getCenterY() const;
     int getSpriteIndex() const;
+    int getAnimationSpeed() const;
     bool getMirrorX() const;
     bool getMirrorY() const;
     int getHSpd() const;
@@ -94,6 +96,7 @@ public:
     virtual void setScale(int scale);
     virtual void setImageFrameIndex(int imageFrameIndex);
     virtual void setSpriteIndex(int spriteIndex);
+    virtual void setAnimationSpeed(int animationSpeed);
     virtual void addSprite(std::vector<imageFrame> sprite, int width, int height);
     virtual void setSprites(std::vector<std::vector<imageFrame>> sprites);
 

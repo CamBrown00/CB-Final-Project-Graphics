@@ -4,7 +4,9 @@
 
 class LinkObj : public GameObj {
 private:
-    int health;
+    std::vector<char> controlKeys;
+    std::vector<bool> keysPressed;
+
 public:
     // Constructors
     LinkObj();
@@ -17,13 +19,14 @@ public:
     virtual ~LinkObj() = default;
 
     // Getters
-
-    // Setters
+    std::vector<char> getControlKeys() const;
+    std::vector<bool> getKeysPressed() const;
 
     // Non-trivial methods
     void kbd(unsigned char key, int x, int y) override;
     void kbdUp(unsigned char key, int x, int y) override;
     void readSpritesFromFiles();
+    void assignControlKeys();
 
 };
 

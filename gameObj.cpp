@@ -95,6 +95,10 @@ int GameObj :: getSpriteIndex() const {
     return spriteIndex;
 }
 
+int GameObj :: getAnimationSpeed() const {
+    return animationSpeed;
+}
+
 int GameObj :: getCenterX() const {
     return center.x;
 }
@@ -142,6 +146,12 @@ void  GameObj :: setImageFrameIndex(int imageFrameIndex) {
 
 void  GameObj :: setSpriteIndex(int spriteIndex) {
     this->spriteIndex = spriteIndex;
+}
+
+void  GameObj :: setAnimationSpeed(int animationSpeed) {
+    if (animationSpeed >= 0) {
+        this->animationSpeed = animationSpeed;
+    }
 }
 
 void GameObj :: addSprite(std::vector<imageFrame> sprite, int width, int height) {
@@ -196,33 +206,34 @@ void GameObj :: moveY(double deltaY) {
 // Mirrors sprite at current sprite index by swapping the pixels in each row of the sprite
 void GameObj :: mirrorSpritesX() {
     if (sprites.size() > 0) {
-        int width = spriteWidths[spriteIndex];
-        int height = spriteHeights[spriteIndex];
         mirrorX = !mirrorX;
-        std::vector<std::vector<point2D>> tempCoords = sprites[spriteIndex][imageFrameIndex].pixelCoords;
-        std::vector<point2D> tempPixelBeginCoord;
-        std::vector<point2D> tempPixelEndCoord;
-        int count = 0;
-        for (int i = 0; i < height; ++i) {
-            ++count;
-            for (int j = 0; j < width; j++) {
-                if (j < width/2) {
-                    if (width * count != (width * height)) {
-                        tempPixelBeginCoord = tempCoords[(width * i) + j];
-                        tempPixelEndCoord = tempCoords[(width * count) - j];
-                        tempCoords[(width * count) - j] = tempPixelBeginCoord;
-                        tempCoords[(width * i) + j] = tempPixelEndCoord;
-                    }
-                    else {
-                        tempPixelBeginCoord = tempCoords[(width * i) + j];
-                        tempPixelEndCoord = tempCoords[(width * height) - j - 1];
-                        tempCoords[(width * height) - j - 1] = tempPixelBeginCoord;
-                        tempCoords[(width * i) + j] = tempPixelEndCoord;
+        for (int k = 0; k < sprites[spriteIndex].size(); ++k) {
+            int width = spriteWidths[spriteIndex];
+            int height = spriteHeights[spriteIndex];
+            std::vector<std::vector<point2D>> tempCoords = sprites[spriteIndex][k].pixelCoords;
+            std::vector<point2D> tempPixelBeginCoord;
+            std::vector<point2D> tempPixelEndCoord;
+            int count = 0;
+            for (int i = 0; i < height; ++i) {
+                ++count;
+                for (int j = 0; j < width; j++) {
+                    if (j < width / 2) {
+                        if (width * count != (width * height)) {
+                            tempPixelBeginCoord = tempCoords[(width * i) + j];
+                            tempPixelEndCoord = tempCoords[(width * count) - j];
+                            tempCoords[(width * count) - j] = tempPixelBeginCoord;
+                            tempCoords[(width * i) + j] = tempPixelEndCoord;
+                        } else {
+                            tempPixelBeginCoord = tempCoords[(width * i) + j];
+                            tempPixelEndCoord = tempCoords[(width * height) - j - 1];
+                            tempCoords[(width * height) - j - 1] = tempPixelBeginCoord;
+                            tempCoords[(width * i) + j] = tempPixelEndCoord;
+                        }
                     }
                 }
             }
+            sprites[spriteIndex][k].pixelCoords = tempCoords;
         }
-        sprites[spriteIndex][imageFrameIndex].pixelCoords = tempCoords;
     }
 }
 

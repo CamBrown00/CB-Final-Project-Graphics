@@ -3,8 +3,7 @@
 #include <iostream>
 #include <memory>
 #include <vector>
-#include "gameObj.h"
-#include "LinkObj.h"
+#include "linkObj.h"
 using namespace std;
 
 GLdouble width, height;
@@ -17,7 +16,7 @@ void init() {
     width = 500;
     height = 500;
 
-    gameObjs.push_back(make_unique<LinkObj>(1, 0, 0, 2));
+    gameObjs.push_back(make_unique<LinkObj>(1, 100, 100, 2));
 
 }
 
@@ -112,17 +111,25 @@ void mouse(int button, int state, int x, int y) {
     glutPostRedisplay();
 }
 
-void timer(int dummy) {
+void linkObjAnimationTimer(int dummy) {
+    if (gameObjs[0]->getAnimationSpeed() > 0) {
+        if (gameObjs[0]->getImageFrameIndex() < gameObjs[0]->getSprites()[gameObjs[0]->getSpriteIndex()].size() - 1) {
+            gameObjs[0]->setImageFrameIndex(gameObjs[0]->getImageFrameIndex() + 1);
+        } else {
+            gameObjs[0]->setImageFrameIndex(0);
+        }
+    }
     
     glutPostRedisplay();
-    glutTimerFunc(30, timer, dummy);
+    glutTimerFunc(100, linkObjAnimationTimer, dummy);
 }
 
-void linkObjTimer (int dummy) {
+void linkObjMoveTimer(int dummy) {
     gameObjs[0]->moveX(gameObjs[0]->getHSpd());
     gameObjs[0]->moveY(gameObjs[0]->getVSpd());
+
     glutPostRedisplay();
-    glutTimerFunc(30, linkObjTimer, dummy);
+    glutTimerFunc(10, linkObjMoveTimer, dummy);
 }
 
 /* Main function: GLUT runs as a console application starting at main()  */
@@ -135,7 +142,7 @@ int main(int argc, char** argv) {
     glutInitDisplayMode(GLUT_RGBA);
     
     glutInitWindowSize((int)width, (int)height);
-    glutInitWindowPosition(250, 180); // Position the window's initial top-left corner
+    glutInitWindowPosition(100, 100); // Position the window's initial top-left corner
     /* create the window and store the handle to it */
     wd = glutCreateWindow("The Legend of Zelda" /* title */ );
     
@@ -147,6 +154,7 @@ int main(int argc, char** argv) {
     
     // register keyboard press event processing function
     // works for numbers, letters, spacebar, etc.
+    glutIgnoreKeyRepeat(1);
     glutKeyboardFunc(kbd);
     glutKeyboardUpFunc(kbdUp);
     
@@ -160,8 +168,8 @@ int main(int argc, char** argv) {
     glutMouseFunc(mouse);
     
     // handles timer
-    glutTimerFunc(0, timer, 0);
-    glutTimerFunc(0, linkObjTimer, 0);
+    glutTimerFunc(0, linkObjAnimationTimer, 0);
+    glutTimerFunc(0, linkObjMoveTimer, 0);
 
     // Enter the event-processing loop
     glutMainLoop();
