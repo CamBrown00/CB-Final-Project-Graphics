@@ -1,8 +1,6 @@
 #ifndef graphics_h
 #define graphics_h
 
-#include "circle.h"
-
 #include <stdlib.h>
 #ifdef _WIN32
 #include <windows.h>

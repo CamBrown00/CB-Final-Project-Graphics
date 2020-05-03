@@ -1,9 +1,35 @@
 #ifndef CB_FINAL_PROJECT_GRAPHICS_GAMEOBJ_H
 #define CB_FINAL_PROJECT_GRAPHICS_GAMEOBJ_H
 
-#include "shape.h"
 #include <vector>
 #include <iostream>
+
+struct color {
+    double red;
+    double green;
+    double blue;
+    double alpha;
+
+    /* Constructors */
+    color();
+    color(double r, double g, double b);
+    color(double r, double g, double b, double a);
+
+    /* Overloaded Operator */
+    friend std::ostream& operator << (std::ostream& outs, const color &c);
+};
+
+struct point2D {
+    double x;
+    double y;
+
+    /* Constructors */
+    point2D();
+    point2D(double x, double y);
+
+    /* Overloaded Operator */
+    friend std::ostream& operator << (std::ostream& outs, const point2D &p);
+};
 
 struct imageFrame {
     std::vector<color> pixelColors;

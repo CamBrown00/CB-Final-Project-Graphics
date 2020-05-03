@@ -1,10 +1,36 @@
 #include "gameObj.h"
 #include "graphics.h"
 #include <iostream>
-#include<iomanip>
 #include <fstream>
-#include <sstream>
 #include <string>
+
+
+/********************* Color Struct ********************/
+
+color::color() : red(0.0), green(0.0), blue(0.0), alpha(1.0) {
+}
+
+color::color(double r, double g, double b, double a) : red(r), green(g), blue(b), alpha(a) {
+}
+
+color::color(double r, double g, double b) : red(r), green(g), blue(b), alpha(1.0) {
+}
+
+std::ostream& operator << (std::ostream& outs, const color &c) {
+    outs << "(" << c.red << ", " << c.green << ", " << c.blue << ")";
+    return outs;
+}
+
+/********************* Point Struct ********************/
+
+point2D::point2D() : x(0), y(0) {}
+
+point2D::point2D(double x, double y) : x(x), y(y) {}
+
+std::ostream& operator << (std::ostream& outs, const point2D &p) {
+    outs << "(" << p.x << ", " << p.y << ")";
+    return outs;
+}
 
 /********************* Image Frame Struct ********************/
 
