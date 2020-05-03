@@ -22,6 +22,8 @@ LinkObj :: LinkObj(int id, int x, int y, int scale, std::vector<std::vector<imag
 }
 
 //Non-Trivial Methods
+
+// This function adjusts the speed and sprite for each key press
 void LinkObj :: kbd(unsigned char key, int x, int y) {
     std::cout << key << std::endl;
     int vSpd = 1;
@@ -59,6 +61,7 @@ void LinkObj :: kbd(unsigned char key, int x, int y) {
     }
 }
 
+// This function updates the animation speed and movement speed for key releases
 void LinkObj :: kbdUp(unsigned char key, int x, int y) {
         if(key == 'w') {
             setVSpd(0);
@@ -81,12 +84,14 @@ void LinkObj :: kbdUp(unsigned char key, int x, int y) {
     }
 }
 
+// This function just runs the addSpriteFromFile function for each of Link's sprites
 void LinkObj :: readSpritesFromFiles() {
     addSpriteFromFile("../Resources/Sprites/Link/MoveSprs/LinkMoveSprFront/linkMoveSprFront", 2);
     addSpriteFromFile("../Resources/Sprites/Link/MoveSprs/LinkMoveSprSide/linkMoveSprSide", 2);
     addSpriteFromFile("../Resources/Sprites/Link/MoveSprs/LinkMoveSprBack/linkMoveSprBack", 2);
 }
 
+// This function populates the controlKeys and keysPressed vectors
 void LinkObj :: assignControlKeys() {
     controlKeys = {'w', 'a', 's', 'd'};
     for (int i = 0; i < controlKeys.size(); ++i) {

@@ -10,12 +10,14 @@ GLdouble width, height;
 int wd;
 vector<unique_ptr<GameObj>> gameObjs;
 
+// The gameObjs vector is populated here
 void init() {
 
     srand(time(0));
     width = 500;
     height = 500;
 
+    // Link is always required to be the first object pushed into this vector
     gameObjs.push_back(make_unique<LinkObj>(1, 100, 100, 2));
 
 }
@@ -52,7 +54,7 @@ void display() {
     glFlush();  // Render now
 }
 
-// http://www.theasciicode.com.ar/ascii-control-characters/escape-ascii-code-27.html
+// The kbd functions for each of the gameObjs in the vector are called here
 void kbd(unsigned char key, int x, int y)
 {
     // Call kbd functions for game objects
@@ -69,6 +71,7 @@ void kbd(unsigned char key, int x, int y)
     glutPostRedisplay();
 }
 
+// The kbdUp functions for each of the gameObjs in the vector are called here
 void kbdUp(unsigned char key, int x, int y) {
     // Call kbdUp functions for game objects
     for (unique_ptr<GameObj> &gObj : gameObjs) {
@@ -77,40 +80,7 @@ void kbdUp(unsigned char key, int x, int y) {
     glutPostRedisplay();
 }
 
-void kbdS(int key, int x, int y) {
-    switch(key) {
-        case GLUT_KEY_DOWN:
-            break;
-        case GLUT_KEY_LEFT:
-            break;
-        case GLUT_KEY_RIGHT:
-            break;
-        case GLUT_KEY_UP:
-            break;
-    }
-    glutPostRedisplay();
-}
-
-void cursor(int x, int y) {
-
-    //c.setCenter(x, y);
-    
-    glutPostRedisplay();
-}
-
-// button will be GLUT_LEFT_BUTTON or GLUT_RIGHT_BUTTON
-// state will be GLUT_UP or GLUT_DOWN
-void mouse(int button, int state, int x, int y) {
-
-    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-        // The left button has been pressed down
-    } else if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
-        // The left button has been released
-    }
-    
-    glutPostRedisplay();
-}
-
+// This timer handles playing the frames of link's sprites and resets them once the last frame is reached
 void linkObjAnimationTimer(int dummy) {
     if (gameObjs[0]->getAnimationSpeed() > 0) {
         if (gameObjs[0]->getImageFrameIndex() < gameObjs[0]->getSprites()[gameObjs[0]->getSpriteIndex()].size() - 1) {
@@ -124,6 +94,7 @@ void linkObjAnimationTimer(int dummy) {
     glutTimerFunc(100, linkObjAnimationTimer, dummy);
 }
 
+// This timer handles the movement for link
 void linkObjMoveTimer(int dummy) {
     gameObjs[0]->moveX(gameObjs[0]->getHSpd());
     gameObjs[0]->moveY(gameObjs[0]->getVSpd());
@@ -157,15 +128,6 @@ int main(int argc, char** argv) {
     glutIgnoreKeyRepeat(1);
     glutKeyboardFunc(kbd);
     glutKeyboardUpFunc(kbdUp);
-    
-    // register special event: function keys, arrows, etc.
-    glutSpecialFunc(kbdS);
-    
-    // handles mouse movement
-    glutPassiveMotionFunc(cursor);
-    
-    // handles mouse click
-    glutMouseFunc(mouse);
     
     // handles timer
     glutTimerFunc(0, linkObjAnimationTimer, 0);

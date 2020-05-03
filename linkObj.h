@@ -2,6 +2,7 @@
 #define CB_FINAL_PROJECT_GRAPHICS_LINK_H
 #include "gameObj.h"
 
+// This class is derived from GameObj and is meant to represent Link, the main character of Zelda 1
 class LinkObj : public GameObj {
 private:
     std::vector<char> controlKeys;

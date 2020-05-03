@@ -154,12 +154,6 @@ void  GameObj :: setAnimationSpeed(int animationSpeed) {
     }
 }
 
-void GameObj :: addSprite(std::vector<imageFrame> sprite, int width, int height) {
-    sprites.push_back(sprite);
-    spriteWidths.push_back(width);
-    spriteHeights.push_back(height);
-}
-
 void GameObj :: setSprites(std::vector<std::vector<imageFrame>> sprites) {
     this->sprites = sprites;
 }
@@ -203,10 +197,18 @@ void GameObj :: moveY(double deltaY) {
     center.y += deltaY;
 }
 
+// Pushes the given sprite and its dimensions onto the corresponding vectors
+void GameObj :: addSprite(std::vector<imageFrame> sprite, int width, int height) {
+    sprites.push_back(sprite);
+    spriteWidths.push_back(width);
+    spriteHeights.push_back(height);
+}
+
 // Mirrors sprite at current sprite index by swapping the pixels in each row of the sprite
 void GameObj :: mirrorSpritesX() {
     if (sprites.size() > 0) {
         mirrorX = !mirrorX;
+        // Iterate for each frame
         for (int k = 0; k < sprites[spriteIndex].size(); ++k) {
             int width = spriteWidths[spriteIndex];
             int height = spriteHeights[spriteIndex];
@@ -214,6 +216,7 @@ void GameObj :: mirrorSpritesX() {
             std::vector<point2D> tempPixelBeginCoord;
             std::vector<point2D> tempPixelEndCoord;
             int count = 0;
+            //Begin swapping pixels for each row of the sprite
             for (int i = 0; i < height; ++i) {
                 ++count;
                 for (int j = 0; j < width; j++) {
@@ -237,14 +240,12 @@ void GameObj :: mirrorSpritesX() {
     }
 }
 
-void GameObj :: mirrorSpritesY() {
-    mirrorY = !mirrorY;
-
-}
-
-
+// Reads image dimension and color data from the csv files produced by the python script into
+// vectors of colors and points, construct image frames from these, then construct a sprite from
+// the image frames
 void GameObj :: addSpriteFromFile(std::string directory, int frameCount) {
     std::vector<imageFrame> imageFrames;
+    // Iterate for each frame
     for (int i = 1; i <= frameCount; ++i) {
         std::ifstream inFile;
         inFile.open(directory + std::to_string(i) + ".csv");
@@ -290,10 +291,13 @@ void GameObj :: addSpriteFromFile(std::string directory, int frameCount) {
     sprites.push_back(imageFrames);
 }
 
+// Draw the sprites to the screen from the sprites vector, adjusting for scale, using the GL_QUADS function
+// to create each pixel
 void GameObj :: draw() const {
     if (sprites.size() > 0) {
         std::vector<color> colors = sprites[spriteIndex][imageFrameIndex].pixelColors;
         std::vector<std::vector<point2D>> coords = sprites[spriteIndex][imageFrameIndex].pixelCoords;
+        // Begin drawing each pixel to the window, adjusting for scale and center
         if (coords.size() == colors.size()) {
             for (int i = 0; i < sprites[spriteIndex][imageFrameIndex].pixelCoords.size(); ++i) {
                 glBegin(GL_QUADS);

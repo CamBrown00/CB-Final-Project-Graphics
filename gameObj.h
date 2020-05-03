@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 
+// color struct, stores rgba values, one used to represent each pixel of an image frame
 struct color {
     double red;
     double green;
@@ -19,6 +20,7 @@ struct color {
     friend std::ostream& operator << (std::ostream& outs, const color &c);
 };
 
+// point2D struct, stores x and y coordinates, one used to represent each pixel of the image frame
 struct point2D {
     double x;
     double y;
@@ -31,6 +33,7 @@ struct point2D {
     friend std::ostream& operator << (std::ostream& outs, const point2D &p);
 };
 
+// imageFrame struct, composed of a vector of colors and a vector of points, stored in a vector for a sprite
 struct imageFrame {
     std::vector<color> pixelColors;
     std::vector<std::vector<point2D>> pixelCoords;
@@ -104,7 +107,6 @@ public:
     virtual void kbd(unsigned char key, int x, int y) = 0;
     virtual void kbdUp(unsigned char key, int x, int y) = 0;
     virtual void mirrorSpritesX();
-    virtual void mirrorSpritesY();
     virtual void move(double deltaX, double deltaY);
     virtual void moveX(double deltaX);
     void moveY(double deltaY);
