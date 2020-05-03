@@ -13,10 +13,8 @@ int wd;
 Circle c;
 vector<Circle> snow;
 vector<unique_ptr<Shape>> snowperson;
+vector<unique_ptr<GameObj>> gameObjs;
 int snowpersonXDirection;
-
-GameObj gObj = GameObj(1, 0, 0, 2);
-LinkObj link = LinkObj(1, 0, 0, 2);
 
 void populateSnowperson() {
     // Three white circles
@@ -59,21 +57,23 @@ void init() {
     //Test gameObjs
     vector<color> testColors;
     vector<point2D> testCoords;
-    // region Directly displaying an image in c++ requires the use of shaders and textures
     testColors.push_back(color(.835, .159, 0.035, 0.0));
     //testCoords.push_back({point2D(0, 0), point2D(0, 5), point2D(5, 5), point2D(5, 0)});
     testCoords.push_back(point2D(0, 0));
-    //endregion
     vector<imageFrame> test = {imageFrame(testColors, testCoords)};
     //gObj.addSprite(test);
     //gObj.addSpriteFromFile("../Resources/Sprites/Link/MoveSprs/LinkMoveSprBack/linkMoveSprBack", 2);
+
+    gameObjs.push_back(make_unique<LinkObj>(1, 0, 0, 2));
 
 }
 
 /* Initialize OpenGL Graphics */
 void initGL() {
     // Set "clearing" or background color
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Black and opaque
+    glClearColor(0.9882f, 0.84706f, 0.65882f, 1.0f);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 /* Handler for window-repaint event. Call back when the window first appears and
@@ -92,10 +92,11 @@ void display() {
     glClear(GL_COLOR_BUFFER_BIT); // DO NOT CHANGE THIS LINE
     
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // DO NOT CHANGE THIS LINE
-    
-    /*
-     * Draw here
-     */
+
+    for (unique_ptr<GameObj> &gObj : gameObjs) {
+        gObj->draw();
+    }
+
     /*
     c.draw();
     for (Circle &s : snow) {
@@ -107,14 +108,9 @@ void display() {
     }
      */
 
-    /*
-    //Draw the GameObjs
-    for (GameObj &g : gameObjs) {
-        g.draw();
-    }
-     */
-    gObj.draw();
-    link.draw();
+
+    // Draw the gameObjs using polymorphism
+    //link.draw();
     
     glFlush();  // Render now
 }
@@ -123,7 +119,9 @@ void display() {
 void kbd(unsigned char key, int x, int y)
 {
     // Call kbd functions for game objects
-    link.kbd(key, x, y);
+    for (unique_ptr<GameObj> &gObj : gameObjs) {
+        gObj->kbd(key, x, y);
+    }
 
     switch(key) {
         // escape
@@ -149,8 +147,10 @@ void kbd(unsigned char key, int x, int y)
 }
 
 void kbdUp(unsigned char key, int x, int y) {
-    // Call kbd functions for game objects
-    link.kbdUp(key, x, y);
+    // Call kbdUp functions for game objects
+    for (unique_ptr<GameObj> &gObj : gameObjs) {
+        gObj->kbdUp(key, x, y);
+    }
     glutPostRedisplay();
 }
 
@@ -210,7 +210,17 @@ void timer(int dummy) {
 }
 
 void linkObjTimer (int dummy) {
-
+    /*
+    for (unique_ptr<GameObj> &gObj : gameObjs) {
+        if (gObj->getId() == 0) {
+            std::cout << gObj->getHSpd() << std::endl;
+            gObj->moveX(gObj->getHSpd());
+            gObj->moveY(gObj->getVSpd());
+        }
+    }
+     */
+    gameObjs[0]->moveX(gameObjs[0]->getHSpd());
+    gameObjs[0]->moveY(gameObjs[0]->getVSpd());
     glutPostRedisplay();
     glutTimerFunc(30, linkObjTimer, dummy);
 }
@@ -269,8 +279,9 @@ int main(int argc, char** argv) {
     
     // handles timer
     glutTimerFunc(0, timer, 0);
+    glutTimerFunc(0, linkObjTimer, 0);
     glutTimerFunc(0, timerSnowperson, 0);
-    
+
     // Enter the event-processing loop
     glutMainLoop();
     return 0;

@@ -27,6 +27,8 @@ private:
     bool mirrorY = false;
     int spriteIndex = 0;
     point2D center;
+    int hSpd = 0;
+    int vSpd = 0;
 
 public:
     //Constructors
@@ -47,6 +49,8 @@ public:
     int getSpriteIndex() const;
     bool getMirrorX() const;
     bool getMirrorY() const;
+    int getHSpd() const;
+    int getVSpd() const;
     point2D getCenter() const;
     std::vector<std::vector<imageFrame>> getSprites() const;
     std::vector<int> getSpriteWidths() const;
@@ -58,6 +62,8 @@ public:
     virtual void setCenter(int x, int y);
     virtual void setCenterX(int x);
     virtual void setCenterY(int y);
+    virtual void setHSpd(int hSpd);
+    virtual void setVSpd(int vSpd);
     virtual void setId(int id);
     virtual void setScale(int scale);
     virtual void setImageFrameIndex(int imageFrameIndex);
@@ -66,6 +72,8 @@ public:
     virtual void setSprites(std::vector<std::vector<imageFrame>> sprites);
 
     //Non-Trivial Methods
+    virtual void kbd(unsigned char key, int x, int y) = 0;
+    virtual void kbdUp(unsigned char key, int x, int y) = 0;
     virtual void mirrorSpritesX();
     virtual void mirrorSpritesY();
     virtual void move(double deltaX, double deltaY);

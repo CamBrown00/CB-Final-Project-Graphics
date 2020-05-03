@@ -81,6 +81,14 @@ point2D GameObj :: getCenter() const {
     return center;
 }
 
+int GameObj :: getHSpd() const {
+    return hSpd;
+}
+
+int GameObj :: getVSpd() const {
+    return vSpd;
+}
+
 std::vector<std::vector<imageFrame>> GameObj :: getSprites() const {
     return sprites;
 }
@@ -134,6 +142,14 @@ void GameObj :: setCenterX(int x) {
 
 void GameObj :: setCenterY(int y) {
     center.y = y;
+}
+
+void GameObj :: setVSpd(int vSpd) {
+    this->vSpd = vSpd;
+}
+
+void GameObj :: setHSpd(int hSpd) {
+    this->hSpd = hSpd;
 }
 
 
@@ -226,7 +242,7 @@ void GameObj :: addSpriteFromFile(std::string directory, int frameCount) {
                 if (sum == 0){
                     pixelColors.push_back(color(0.0, 0.0, 0.0, a/255));
                 } else {
-                    pixelColors.push_back(color(double(r)/sum, double(g)/sum, double(b)/sum, double(a)/255));
+                    pixelColors.push_back(color(double(r)/255, double(g)/255, double(b)/255, double(a)/255));
                 }
                 coordinates.push_back(point2D(k, j));
             }

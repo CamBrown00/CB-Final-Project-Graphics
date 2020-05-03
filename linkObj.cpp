@@ -17,26 +17,28 @@ LinkObj :: LinkObj(int id, int x, int y, int scale, std::vector<std::vector<imag
 }
 
 //Non-Trivial Methods
-void LinkObj :: kbd(unsigned char key, int x, int y){
+void LinkObj :: kbd(unsigned char key, int x, int y) {
+    int vSpd = 3;
+    int hSpd = 3;
     switch(key) {
         case 'w': {
-            moveY(-5);
+            setVSpd(-vSpd);
             setSpriteIndex(2);
             break;
         }
         case 'a': {
-            moveX(-5);
+            setHSpd(-hSpd);
             setSpriteIndex(1);
             if (!getMirrorX()) mirrorSpritesX();
             break;
         }
         case 's': {
-            moveY(5);
+            setVSpd(vSpd);
             setSpriteIndex(0);
             break;
         }
         case 'd': {
-            moveX(5);
+            setHSpd(hSpd);
             setSpriteIndex(1);
             if (getMirrorX()) mirrorSpritesX();
             break;
@@ -45,18 +47,22 @@ void LinkObj :: kbd(unsigned char key, int x, int y){
     }
 }
 
-void LinkObj :: kbdUp(unsigned char key, int x, int y){
+void LinkObj :: kbdUp(unsigned char key, int x, int y) {
     switch(key) {
         case 'w': {
+            setVSpd(0);
             break;
         }
         case 'a': {
+            setHSpd(0);
             break;
         }
         case 's': {
+            setVSpd(0);
             break;
         }
         case 'd': {
+            setHSpd(0);
             break;
         }
 
