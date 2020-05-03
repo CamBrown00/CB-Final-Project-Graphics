@@ -11,7 +11,7 @@ def main():
     readSpriteToFile(sprPath + "MoveSprs/LinkMoveSprSide/")
     readSpriteToFile(sprPath + "MoveSprs/LinkMoveSprBack/")
 
-    #Attack Sprites
+    # Attack Sprites
 
 def readSubdirectorySpritesToFile(mainDirectory):
     print("test")
